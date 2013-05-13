@@ -1,12 +1,9 @@
 (ns ^{:doc "Dependencies graph"}
   sh-deps.core
-  (:use [midje.sweet]
-        clojure.repl
-        clojure.java.javadoc
-        [clojure.pprint :only [pprint]]
-        [clojure.tools.cli]
-        [sh-deps.sh         :as sd :only [graph-read]])
-  (:require [clojure.string     :as s]
+  (:use midje.sweet)
+  (:require [sh-deps.sh         :as sd]
+            [clojure.tools.cli  :as cli]
+            [clojure.string     :as s]
             [clojure.java.shell :as shell]))
 
 (defn- write-lines
@@ -46,10 +43,10 @@
   [g f] (write-lines f (graph-lines g)))
 
 (fact "graph-write"
-      (graph-write :g :filename) => nil
-      (provided
-       (graph-lines :g) => :lines
-       (write-lines :filename :lines) => nil))
+  (graph-write :g :filename) => nil
+  (provided
+    (graph-lines :g) => :lines
+    (write-lines :filename :lines) => nil))
 
 (defn- graph "Output a dot file f representing the relationships between the scripts in the given directory d."
   [d f] (graph-write (sd/graph-read {:type :sh-deps.sh/sh, :dir d}) f))
@@ -72,7 +69,7 @@
 
 (defn -main [& args]
   (let [[options args banner :as opts]
-        (cli args
+        (cli/cli args
              ["-h" "--help"              "Show help" :default false :flag true]
              ["-d" "--directory"         "Directory to analyze"]
              ["-o" "--output-dot-file"   "Graph dot file to generate"]

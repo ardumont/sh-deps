@@ -1,11 +1,8 @@
 (ns ^{:doc "Specific implem for shell scripts"}
   sh-deps.sh
-  (:use [midje.sweet]
-        clojure.repl
-        clojure.java.javadoc
-        [clojure.pprint :only [pprint]]
-        [clojure.tools.cli])
-  (:require [clojure.string :as s]
+  (:use  [midje.sweet])
+  (:require
+            [clojure.string     :as s]
             [clojure.java.shell :as sh]))
 
 (defn- find-all "Find all the files from the directory d"
